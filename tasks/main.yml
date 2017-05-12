@@ -1,0 +1,14 @@
+---
+- name: Include OS family specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_os_family }}.yml"
+
+- include: nginx_pre.yml
+- include: nginx_install.yml
+
+- block: # Config Nginx
+  - include: nginx_search_config.yml
+  - include: nginx_post.yml
+  tags:
+    - nginx-config

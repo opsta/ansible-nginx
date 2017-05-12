@@ -1,0 +1,7 @@
+---
+
+nginx_search_config_path: "{{ playbook_dir }}/files/groups/{{ item }}/nginx"
+nginx_search_config_paths: []
+
+nginx_host_config_file_path: "{{ nginx_host_config_path | default(inventory_hostname) }}/nginx.conf"
+nginx_config_path: /etc/nginx

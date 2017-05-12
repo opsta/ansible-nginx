@@ -1,0 +1,30 @@
+---
+- name: Set list of path to look for local Nginx configuration directory
+  set_fact:
+    nginx_search_config_paths: "{{ nginx_search_config_paths }} + [ '{{ nginx_search_config_path }}' ]"
+  with_items: "{{ group_names }}"
+
+- name: Check if Nginx configuration directory exists
+  stat:
+    path: "{{ item }}"
+  register: nginx_config_check
+  become: false
+  delegate_to: 127.0.0.1
+  with_first_found:
+    - files: "{{ nginx_search_config_paths }}"
+      skip: true
+
+- name: Set Nginx configuration directory
+  set_fact:
+    nginx_host_config_path: "{{ nginx_config_check.results[0].stat.path }}"
+  when:
+    - nginx_config_check.results[0] is defined
+    - nginx_config_check.results[0].stat is defined
+    - nginx_config_check.results[0].stat.isdir
+
+- name: Check if Nginx configuration file is exists
+  stat:
+    path: "{{ nginx_host_config_file_path }}"
+  become: false
+  delegate_to: 127.0.0.1
+  register: nginx_config_check

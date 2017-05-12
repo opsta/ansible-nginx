@@ -1,0 +1,8 @@
+---
+- name: Copy Nginx configuration file
+  synchronize:
+    src: "{{ nginx_host_config_path }}/"
+    dest: "{{ nginx_config_path }}/"
+    delete: yes
+  when: nginx_config_check.stat.exists
+  notify: Check nginx configuration and reload nginx
