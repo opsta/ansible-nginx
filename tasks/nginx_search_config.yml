@@ -28,3 +28,10 @@
   become: false
   delegate_to: 127.0.0.1
   register: nginx_config_check
+
+- name: Check if Nginx ssl directory is exists
+  stat:
+    path: "{{ nginx_host_config_ssl_path }}"
+  become: false
+  delegate_to: 127.0.0.1
+  register: nginx_config_ssl_check

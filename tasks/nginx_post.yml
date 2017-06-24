@@ -1,8 +1,20 @@
 ---
+# rsync nginx configuration except ssl directory
 - name: Copy Nginx configuration file
   synchronize:
     src: "{{ nginx_host_config_path }}/"
     dest: "{{ nginx_config_path }}/"
     delete: yes
+    rsync_opts:
+      - "--exclude=ssl"
   when: nginx_config_check.stat.exists
+  notify: Check nginx configuration and reload nginx
+
+- name: Copy SSL certificates directory
+  copy:
+    src: "{{ nginx_host_config_path }}/ssl"
+    dest: "{{ nginx_config_path }}/"
+  when:
+    - nginx_config_ssl_check.stat.isdir is defined
+    - nginx_config_ssl_check.stat.isdir
   notify: Check nginx configuration and reload nginx
