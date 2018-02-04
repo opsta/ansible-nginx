@@ -4,11 +4,11 @@
   with_first_found:
     - "{{ ansible_os_family }}.yml"
 
-- include: nginx_pre.yml
-- include: nginx_install.yml
+- include_tasks: nginx_pre.yml
+- include_tasks: nginx_install.yml
 
 - block: # Config Nginx
-  - include: nginx_search_config.yml
-  - include: nginx_post.yml
+  - include_tasks: nginx_search_config.yml
+  - include_tasks: nginx_post.yml
   tags:
     - nginx-config
