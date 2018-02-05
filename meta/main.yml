@@ -4,7 +4,7 @@ galaxy_info:
   description: Ansible role to install and config Nginx
   company: "Opsta (Thailand) Co.,Ltd."
   license: "MIT"
-  min_ansible_version: 2.1
+  min_ansible_version: 2.4
   platforms:
   - name: Ubuntu
     versions:
