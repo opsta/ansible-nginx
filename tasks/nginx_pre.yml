@@ -5,9 +5,18 @@
   tags:
     - nginx-install
 
+- name: Add Nginx reporitory key from keyfile
+  apt_key:
+    url: "{{ nginx_apt_key_url }}"
+    state: present
+  when: nginx_use_upstream_apt_key
+  tags:
+    - nginx-install
+
 - name: Add Nginx repository key
   apt_key:
     keyserver: "{{ nginx_apt_key_server }}"
     id: "{{ nginx_apt_key_id }}"
+  when: not nginx_use_upstream_apt_key
   tags:
     - nginx-install
