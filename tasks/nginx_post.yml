@@ -1,4 +1,15 @@
 ---
+# synchronize module does not work well with sudo with password
+# https://github.com/ansible/ansible/issues/20769#issuecomment-321341370
+- name: Allow rsync without SUDO password
+  lineinfile:
+    path: /etc/sudoers
+    state: present
+    insertafter: '^%sudo'
+    line: "{{ ansible_user }} ALL=NOPASSWD: /usr/bin/rsync"
+    validate: 'visudo -cf %s'
+  when: nginx_config_check.stat.exists
+
 # rsync nginx configuration except ssl directory
 - name: Copy Nginx configuration file
   synchronize:
@@ -9,6 +20,14 @@
       - "--exclude=ssl"
   when: nginx_config_check.stat.exists
   notify: Check nginx configuration and reload nginx
+
+- name: Disallow rsync without SUDO password
+  lineinfile:
+    path: /etc/sudoers
+    state: absent
+    line: "{{ ansible_user }} ALL=NOPASSWD: /usr/bin/rsync"
+    validate: 'visudo -cf %s'
+  when: nginx_config_check.stat.exists
 
 - name: Copy SSL certificates directory
   copy:
