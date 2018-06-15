@@ -13,10 +13,22 @@
   tags:
     - nginx-install
 
-- name: Add Nginx repository key
+- name: Add Nginx repository key (un-proxy environment)
   apt_key:
     keyserver: "{{ nginx_apt_key_server }}"
     id: "{{ nginx_apt_key_id }}"
-  when: not nginx_use_upstream_apt_key
+  when:
+    - not nginx_use_upstream_apt_key
+    - proxy_env is not defined
+  tags:
+    - nginx-install
+
+# apt-key with proxy need to use command
+# https://github.com/ansible/ansible/issues/31691#issuecomment-396973282
+- name: Add Nginx repository key (proxy environment)
+  command: "apt-key adv --keyserver-options http-proxy={{ proxy_env.http_proxy }} --fetch-keys 'http://{{ nginx_apt_key_server }}/pks/lookup?op=get&search=0x{{ nginx_apt_key_id }}'"
+  when:
+    - not nginx_use_upstream_apt_key
+    - proxy_env is defined
   tags:
     - nginx-install
