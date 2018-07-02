@@ -1,11 +1,12 @@
 ---
-- name: Add Nginx repository
+- name: Add Nginx repository (Debian/Ubuntu)
+  when: ansible_os_family == "Debian"
   apt_repository:
     repo: "{{ nginx_deb_repository }}"
   tags:
     - nginx-install
 
-- name: Add Nginx reporitory key from keyfile
+- name: Add Nginx repository key from keyfile (Debian/Ubuntu)
   apt_key:
     url: "{{ nginx_apt_key_url }}"
     state: present
@@ -13,22 +14,35 @@
   tags:
     - nginx-install
 
-- name: Add Nginx repository key (un-proxy environment)
+- name: Add Nginx repository key (un-proxy environment) (Debian/Ubuntu)
   apt_key:
     keyserver: "{{ nginx_apt_key_server }}"
     id: "{{ nginx_apt_key_id }}"
   when:
     - not nginx_use_upstream_apt_key
     - proxy_env is not defined
+    - ansible_os_family == "Debian"
   tags:
     - nginx-install
 
 # apt-key with proxy need to use command
 # https://github.com/ansible/ansible/issues/31691#issuecomment-396973282
-- name: Add Nginx repository key (proxy environment)
+- name: Add Nginx repository key (proxy environment) (Debian/Ubuntu)
   command: "apt-key adv --keyserver-options http-proxy={{ proxy_env.http_proxy }} --fetch-keys 'http://{{ nginx_apt_key_server }}/pks/lookup?op=get&search=0x{{ nginx_apt_key_id }}'"
   when:
     - not nginx_use_upstream_apt_key
     - proxy_env is defined
+    - ansible_os_family == "Debian"
+  tags:
+    - nginx-install
+
+- name: Add Nginx repository (RedHat)
+  when: ansible_os_family == "RedHat"
+  yum_repository:
+    name: nginx
+    description: Nginx
+    baseurl: "{{ nginx_yum_repository }}"
+    gpgkey: "{{ nginx_yum_key_url }}"
+    gpgcheck: yes
   tags:
     - nginx-install

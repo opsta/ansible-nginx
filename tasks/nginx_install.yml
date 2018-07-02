@@ -1,11 +1,20 @@
 ---
-- name: Install Nginx
+- name: Install Nginx (Debian/Ubuntu)
+  when: ansible_os_family == "Debian"
   apt:
     name: "{{ nginx_apt_package }}"
     state: present
     update_cache: yes
 
+- name: Install Nginx (RedHat)
+  when: ansible_os_family == "RedHat"
+  yum:
+    name: "{{ nginx_yum_package }}"
+    state: present
+    update_cache: yes
+
 - name: Make sure Nginx start
-  service:
+  systemd:
     name: nginx
     state: started
+    enabled: yes
