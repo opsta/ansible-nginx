@@ -13,7 +13,7 @@
     state: present
     update_cache: yes
 
-- name: Make sure Nginx start
+- name: Ensure Nginx service is started and enabled
   systemd:
     name: nginx
     state: started
