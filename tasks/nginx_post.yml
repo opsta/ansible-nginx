@@ -37,3 +37,10 @@
     - nginx_config_ssl_check.stat.isdir is defined
     - nginx_config_ssl_check.stat.isdir
   notify: Check nginx configuration and reload nginx
+
+- name: Enable seboolean to enable nginx reverse proxy (RedHat)
+  when: ansible_os_family == "RedHat"
+  seboolean:
+    name: httpd_can_network_connect
+    state: yes
+    persistent: yes

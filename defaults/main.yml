@@ -6,5 +6,3 @@ nginx_search_config_paths: []
 nginx_host_config_file_path: "{{ nginx_host_config_path | default(inventory_hostname) }}/nginx.conf"
 nginx_host_config_ssl_path: "{{ nginx_host_config_path | default(inventory_hostname) }}/ssl"
 nginx_config_path: /etc/nginx
-
-nginx_use_upstream_apt_key: false
