@@ -10,7 +10,9 @@
   apt_key:
     url: "{{ nginx_apt_key_url }}"
     state: present
-  when: nginx_use_upstream_apt_key
+  when:
+    - nginx_use_upstream_apt_key
+    - ansible_os_family == "Debian"
   tags:
     - nginx-install
 
