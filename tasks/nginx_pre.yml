@@ -35,6 +35,7 @@
   command: "apt-key adv --keyserver-options http-proxy={{ proxy_env.http_proxy }} --fetch-keys 'http://{{ nginx_apt_key_server }}/pks/lookup?op=get&search=0x{{ nginx_apt_key_id }}'"
   when:
     - ansible_os_family == "Debian"
+    - nginx_use_upstream_apt_key is defined
     - not nginx_use_upstream_apt_key
     - proxy_env is defined
   tags:
