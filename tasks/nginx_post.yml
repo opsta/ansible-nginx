@@ -1,4 +1,13 @@
 ---
+- name: Ensure rsync and libsemanage-python is installed (RedHat)
+  when: ansible_os_family == "RedHat"
+  yum: 
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - rsync
+    - libsemanage-python
+
 # synchronize module does not work well with sudo with password
 # https://github.com/ansible/ansible/issues/20769#issuecomment-321341370
 - name: Allow rsync without SUDO password

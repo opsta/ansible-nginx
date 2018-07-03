@@ -11,8 +11,9 @@
     url: "{{ nginx_apt_key_url }}"
     state: present
   when:
-    - nginx_use_upstream_apt_key
     - ansible_os_family == "Debian"
+    - nginx_use_upstream_apt_key is defined
+    - nginx_use_upstream_apt_key
   tags:
     - nginx-install
 
@@ -21,9 +22,10 @@
     keyserver: "{{ nginx_apt_key_server }}"
     id: "{{ nginx_apt_key_id }}"
   when:
+    - ansible_os_family == "Debian"
+    - nginx_use_upstream_apt_key is defined
     - not nginx_use_upstream_apt_key
     - proxy_env is not defined
-    - ansible_os_family == "Debian"
   tags:
     - nginx-install
 
@@ -32,9 +34,10 @@
 - name: Add Nginx repository key (proxy environment) (Debian/Ubuntu)
   command: "apt-key adv --keyserver-options http-proxy={{ proxy_env.http_proxy }} --fetch-keys 'http://{{ nginx_apt_key_server }}/pks/lookup?op=get&search=0x{{ nginx_apt_key_id }}'"
   when:
+    - ansible_os_family == "Debian"
+    - nginx_use_upstream_apt_key is defined
     - not nginx_use_upstream_apt_key
     - proxy_env is defined
-    - ansible_os_family == "Debian"
   tags:
     - nginx-install
 
