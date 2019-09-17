@@ -1,11 +1,4 @@
 ---
-- name: Add Nginx repository (Debian/Ubuntu)
-  when: ansible_os_family == "Debian"
-  apt_repository:
-    repo: "{{ nginx_deb_repository }}"
-  tags:
-    - nginx-install
-
 - name: Add Nginx repository key from keyfile (Debian/Ubuntu)
   apt_key:
     url: "{{ nginx_apt_key_url }}"
@@ -38,6 +31,13 @@
     - nginx_use_upstream_apt_key is defined
     - not nginx_use_upstream_apt_key
     - proxy_env is defined
+  tags:
+    - nginx-install
+
+- name: Add Nginx repository (Debian/Ubuntu)
+  when: ansible_os_family == "Debian"
+  apt_repository:
+    repo: "{{ nginx_deb_repository }}"
   tags:
     - nginx-install
 
