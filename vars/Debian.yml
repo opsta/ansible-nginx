@@ -1,7 +1,0 @@
----
-nginx_deb_repository: "deb http://nginx.org/packages/ubuntu/ {{ ansible_distribution_release }} nginx"
-nginx_apt_key_id: ABF5BD827BD9BF62
-nginx_apt_key_server: keyserver.ubuntu.com
-nginx_apt_package: nginx
-nginx_apt_key_url: "https://nginx.org/keys/nginx_signing.key"
-nginx_use_upstream_apt_key: false

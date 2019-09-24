@@ -1,12 +1,9 @@
 ---
-- name: Ensure rsync and libsemanage-python is installed (RedHat)
-  when: ansible_os_family == "RedHat"
+- name: Ensure required packages is installed (CentOS/RHEL)
   yum: 
-    name: "{{ item }}"
+    name: "{{ nginx_yum_required_packages }}"
     state: present
-  with_items:
-    - rsync
-    - libsemanage-python
+  when: ansible_os_family == 'RedHat'
 
 # synchronize module does not work well with sudo with password
 # https://github.com/ansible/ansible/issues/20769#issuecomment-321341370
@@ -47,9 +44,9 @@
     - nginx_config_ssl_check.stat.isdir
   notify: Check nginx configuration and reload nginx
 
-- name: Enable seboolean to enable nginx reverse proxy (RedHat)
-  when: ansible_os_family == "RedHat"
+- name: Enable seboolean to enable nginx reverse proxy (CentOS/RHEL)
   seboolean:
     name: httpd_can_network_connect
     state: yes
     persistent: yes
+  when: ansible_os_family == 'RedHat'
