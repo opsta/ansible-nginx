@@ -1,4 +1,18 @@
 ---
+nginx_package_name: nginx
+nginx_service_name: nginx
+
+nginx_apt_repo: "deb http://nginx.org/packages/ubuntu/ {{ ansible_distribution_release }} nginx"
+nginx_apt_key_id: ABF5BD827BD9BF62
+nginx_apt_key_server: keyserver.ubuntu.com
+nginx_apt_key_url: "https://nginx.org/keys/nginx_signing.key"
+nginx_apt_key_use_upstream: false
+
+nginx_yum_repo: "http://nginx.org/packages/rhel/{{ ansible_distribution_major_version }}/{{ ansible_machine }}/"
+nginx_yum_key_url: "https://nginx.org/keys/nginx_signing.key"
+nginx_yum_required_packages:
+  - rsync
+  - libsemanage-python
 
 nginx_search_config_path: "{{ playbook_dir }}/files/groups/{{ item }}/nginx"
 nginx_search_config_paths: []
