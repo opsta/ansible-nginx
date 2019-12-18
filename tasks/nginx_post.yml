@@ -1,6 +1,6 @@
 ---
 - name: Ensure required packages is installed (CentOS/RHEL)
-  yum: 
+  yum:
     name: "{{ nginx_yum_required_packages }}"
     state: present
   when: ansible_os_family == 'RedHat'

@@ -1,4 +1,11 @@
 ---
+- name: Ensure gpg binary is installed (Ubuntu/Debian)
+  apt:
+    name: gnupg
+    update_cache: yes
+  when:
+    - ansible_os_family == 'Debian'
+
 - name: Add Nginx repository key from keyfile (Ubuntu/Debian)
   apt_key:
     url: "{{ nginx_apt_key_url }}"
@@ -21,7 +28,9 @@
 # apt-key with proxy need to use command
 # https://github.com/ansible/ansible/issues/31691#issuecomment-396973282
 - name: Add Nginx repository key (proxy environment) (Ubuntu/Debian)
-  command: "apt-key adv --keyserver-options http-proxy={{ proxy_env.http_proxy }} --fetch-keys 'http://{{ nginx_apt_key_server }}/pks/lookup?op=get&search=0x{{ nginx_apt_key_id }}'"
+  command: |
+    apt-key adv --keyserver-options http-proxy={{ proxy_env.http_proxy }} \
+    --fetch-keys 'http://{{ nginx_apt_key_server }}/pks/lookup?op=get&search=0x{{ nginx_apt_key_id }}'
   when:
     - ansible_os_family == 'Debian'
     - nginx_apt_key_use_upstream is defined
