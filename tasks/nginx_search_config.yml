@@ -1,7 +1,8 @@
 ---
 - name: Set list of path to look for local Nginx configuration directory
   set_fact:
-    nginx_search_config_paths: "{{ nginx_search_config_paths }} + [ '{{ nginx_search_config_path }}' ]"
+    nginx_search_config_paths: >
+      {{ nginx_search_config_paths + [ nginx_search_config_path ] }}
   with_items: "{{ group_names }}"
 
 - name: Check if Nginx configuration directory exists
